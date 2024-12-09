@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Comparison</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 20px;
+        }
+        #app {
+            max-width: 1000px;
+            margin: auto;
+            text-align: center;
+        }
+        h1, h2 {
+            font-family: 'Georgia', serif;
+        }
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #00796b;
+            color: white;
+        }
+        button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+        form {
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <h1>Comparison of Scenarios</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Car Mode Share</th>
+                    <th>Public Transport Mode Share</th>
+                    <th>Average Travel Time</th>
+                    <th>Average Cost</th>
+                    <th>Car Trips Avoided</th>
+                    <th>Emissions Reduction</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for scenario in scenarios %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ scenario.outputs.car }}%</td>
+                    <td>{{ scenario.outputs.public_transport }}%</td>
+                    <td>{{ scenario.outputs.avg_travel_time }} minutes</td>
+                    <td>${{ scenario.outputs.avg_cost }}</td>
+                    <td>{{ scenario.outputs.car_trips_avoided }}</td>
+                    <td>{{ scenario.outputs.emissions_reduction }} tons</td>
+                    <td>
+                        <form action="/delete_scenario/{{ loop.index0 }}" method="post" style="display:inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <canvas id="comparisonChart"></canvas>
+        <script>
+            const scenarios = {{ scenarios | tojson }};
+            const labels = scenarios.map((_, index) => `Scenario ${index + 1}`);
+            const carModeShare = scenarios.map(scenario => scenario.outputs.car);
+            const publicTransportModeShare = scenarios.map(scenario => scenario.outputs.public_transport);
+            const avgTravelTime = scenarios.map(scenario => scenario.outputs.avg_travel_time);
+            const avgCost = scenarios.map(scenario => scenario.outputs.avg_cost);
+            const carTripsAvoided = scenarios.map(scenario => scenario.outputs.car_trips_avoided);
+            const emissionsReduction = scenarios.map(scenario => scenario.outputs.emissions_reduction);
+
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            const comparisonChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Car Mode Share',
+                            data: carModeShare,
+                            borderColor: '#ff6384',
+                            fill: false
+                        },
+                        {
+                            label: 'Public Transport Mode Share',
+                            data: publicTransportModeShare,
+                            borderColor: '#36a2eb',
+                            fill: false
+                        },
+                        {
+                            label: 'Average Travel Time',
+                            data: avgTravelTime,
+                            borderColor: '#ff9f40',
+                            fill: false
+                        },
+                        {
+                            label: 'Average Cost',
+                            data: avgCost,
+                            borderColor: '#4bc0c0',
+                            fill: false
+                        },
+                        {
+                            label: 'Car Trips Avoided',
+                            data: carTripsAvoided,
+                            borderColor: '#9966ff',
+                            fill: false
+                        },
+                        {
+                            label: 'Emissions Reduction',
+                            data: emissionsReduction,
+                            borderColor: '#ffcd56',
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Scenarios'
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Values'
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+
+        <button onclick="window.print()">Print</button>
+        <form action="/policy_builder">
+            <button type="submit">Back to Policy Builder</button>
+        </form>
+        <form action="/">
+            <button type="submit">Home</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Result</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 20px;
+        }
+        #app {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+        h1, h2 {
+            font-family: 'Georgia', serif;
+        }
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #00796b;
+            color: white;
+        }
+        button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <h1>Result</h1>
+        <canvas id="impactChart"></canvas>
+        <script>
+            const data = {{ data | tojson }};
+            const ctx = document.getElementById('impactChart').getContext('2d');
+            const impactChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Car', 'Public Transport'],
+                    datasets: [{
+                        data: [data.car, data.public_transport],
+                        backgroundColor: ['#ff6384', '#36a2eb']
+                    }]
+                }
+            });
+        </script>
+        
+        <h2>Key Metrics</h2>
+        <table>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Mode Share: Car</td>
+                <td>{{ data.car }}%</td>
+            </tr>
+            <tr>
+                <td>Mode Share: Public Transport</td>
+                <td>{{ data.public_transport }}%</td>
+            </tr>
+            <tr>
+                <td>Average Travel Time</td>
+                <td>{{ data.avg_travel_time }} minutes</td>
+            </tr>
+            <tr>
+                <td>Average Cost</td>
+                <td>${{ data.avg_cost }}</td>
+            </tr>
+            <tr>
+                <td>Car Trips Avoided</td>
+                <td>{{ data.car_trips_avoided }}</td>
+            </tr>
+            <tr>
+                <td>Emissions Reduction</td>
+                <td>{{ data.emissions_reduction }} tons</td>
+            </tr>
+        </table>
+
+        <form action="/comparison" method="get">
+            <button type="submit">Compare with Other Policies</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Current Transportation Patterns</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 20px;
+        }
+        #app {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+        h1 {
+            font-family: 'Georgia', serif;
+        }
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <h1>Current Transportation Patterns</h1>
+        <canvas id="modeShareChart"></canvas>
+        <script>
+            const data = {{ data | tojson }};
+            const ctx = document.getElementById('modeShareChart').getContext('2d');
+            const modeShareChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Car', 'Public Transport'],
+                    datasets: [{
+                        data: [data.car, data.public_transport],
+                        backgroundColor: ['#ff6384', '#36a2eb']
+                    }]
+                }
+            });
+        </script>
+        <p>Average Travel Time: {{ data.avg_travel_time }} minutes</p>
+        <p>Average Cost: ${{ data.avg_cost }}</p>
+        <button onclick="window.location.href='/current_patterns'">Enter Current Patterns</button>
+        <button onclick="window.location.href='/policy_builder'">Go to Policy Builder</button>
+    </div>
+</body>
+</html>

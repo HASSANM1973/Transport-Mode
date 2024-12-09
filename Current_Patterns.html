@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Current Patterns</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 20px;
+        }
+        #app {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+        h1 {
+            font-family: 'Georgia', serif;
+        }
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label, input {
+            margin: 10px 0;
+        }
+        button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <h1>Enter Current Patterns</h1>
+        <form action="/baseline" method="post">
+            <label for="carUsage">Private Car Usage (%):</label>
+            <input type="number" id="carUsage" name="carUsage" min="0" max="100" required><br>
+            <label for="publicTransportUsage">Public Transport Usage (%):</label>
+            <input type="number" id="publicTransportUsage" name="publicTransportUsage" min="0" max="100" required><br>
+            <label for="avgTravelTime">Average Travel Time (minutes):</label>
+            <input type="number" id="avgTravelTime" name="avgTravelTime" min="0" required><br>
+            <label for="avgCost">Average Cost ($):</label>
+            <input type="number" id="avgCost" name="avgCost" min="0" required><br>
+            <button type="submit">Calculate</button>
+        </form>
+    </div>
+</body>
+</html>

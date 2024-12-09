@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Green Transport Policy Evaluator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e0f7fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        #app {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+            padding: 20px;
+        }
+        header {
+            background-color: #00796b;
+            color: white;
+            padding: 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        header nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        header nav ul li {
+            margin: 0 15px;
+        }
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        header nav ul li a:hover {
+            text-decoration: underline;
+        }
+        .sub-header {
+            background-color: #004d40;
+            color: white;
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .sub-header button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+        .sub-header button:hover {
+            background-color: #004d40;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .popup h2 {
+            margin-top: 0;
+        }
+        .popup button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .popup button:hover {
+            background-color: #004d40;
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        h1, h2 {
+            font-family: 'Georgia', serif;
+        }
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        section {
+            margin: 20px 0;
+        }
+        button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+        footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        function showPopup() {
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('popup-overlay').style.display = 'block';
+        }
+
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('popup-overlay').style.display = 'none';
+        }
+
+        function checkSignInStatus() {
+            const isSignedIn = document.cookie.split('; ').find(row => row.startsWith('isSignedIn=')).split('=')[1];
+            if (isSignedIn === 'true') {
+                document.getElementById('getStartedButton').disabled = false;
+            }
+        }
+
+        window.onload = checkSignInStatus;
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Green Transport Policy Evaluator</h1>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <nav>
+            <ul>
+                <li><a href="#about">About App</a></li>
+                <li><a href="#goals">App Goals</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#contributions">Contributions</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="sub-header">
+        <button onclick="window.location.href='/sign_in'">Sign In</button>
+        <button onclick="showPopup()">About Us</button>
+    </div>
+    <div id="popup-overlay" class="popup-overlay" onclick="hidePopup()"></div>
+    <div id="popup" class="popup">
+        <h2>About Us</h2>
+        <p>Green Transport Policy Evaluator is a tool for evaluating the impact of transportation policies on mode choice and promoting sustainable transportation.</p>
+        <button onclick="hidePopup()">Close</button>
+    </div>
+    <div id="app">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+            <!-- Background -->
+            <rect width="800" height="600" fill="#e6f3e6"/>
+            
+            <!-- Green City Landscape -->
+            <path d="M0 450 Q400 350 800 450 L800 600 L0 600 Z" fill="#4CAF50" opacity="0.3"/>
+            
+            <!-- Bicycle Lane -->
+            <rect x="50" y="400" width="700" height="50" fill="#8BC34A" opacity="0.5"/>
+            
+            <!-- Electric Bus -->
+            <g transform="translate(100, 300)">
+                <rect x="0" y="0" width="200" height="80" rx="10" ry="10" fill="#2196F3"/>
+                <rect x="20" y="10" width="160" height="60" fill="#81D4FA"/>
+                <rect x="30" y="15" width="20" height="50" fill="#FFFFFF"/>
+                <rect x="60" y="15" width="20" height="50" fill="#FFFFFF"/>
+                <rect x="90" y="15" width="20" height="50" fill="#FFFFFF"/>
+                <rect x="120" y="15" width="20" height="50" fill="#FFFFFF"/>
+                <text x="10" y="110" font-family="Arial" font-size="16" fill="#000000">Electric Bus</text>
+            </g>
+            
+            <!-- Bicycle -->
+            <g transform="translate(500, 380)">
+                <circle cx="30" cy="70" r="25" fill="#4CAF50" stroke="#2E7D32" stroke-width="3"/>
+                <circle cx="100" cy="70" r="25" fill="#4CAF50" stroke="#2E7D32" stroke-width="3"/>
+                <line x1="30" y1="70" x2="100" y2="70" stroke="#2E7D32" stroke-width="3"/>
+                <line x1="55" y1="45" x2="75" y2="20" stroke="#2E7D32" stroke-width="3"/>
+                <text x="0" y="120" font-family="Arial" font-size="16" fill="#000000">Bicycle</text>
+            </g>
+            
+            <!-- Walking/Pedestrian Path -->
+            <path d="M50 450 L750 450" stroke="#8BC34A" stroke-width="10" stroke-dasharray="20,10"/>
+            
+            <!-- People Walking -->
+            <g transform="translate(350, 420)">
+                <path d="M0 0 L10 30 L-10 30 Z" fill="#009688"/>
+                <path d="M30 0 L40 30 L20 30 Z" fill="#009688"/>
+                <text x="-50" y="50" font-family="Arial" font-size="16" fill="#000000">Walking</text>
+            </g>
+            
+            <!-- Green Transportation Strategies Title -->
+            <text x="400" y="50" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="#2E7D32">
+                Green Transportation Strategies
+            </text>
+            
+            <!-- Strategy Icons and Labels -->
+            <g transform="translate(50, 500)">
+                <circle cx="50" cy="0" r="20" fill="#4CAF50"/>
+                <text x="100" y="10" font-family="Arial" font-size="16" fill="#000000">Reduce Carbon Emissions</text>
+                
+                <circle cx="50" cy="50" r="20" fill="#2196F3"/>
+                <text x="100" y="60" font-family="Arial" font-size="16" fill="#000000">Promote Public Transit</text>
+                
+                <circle cx="50" cy="100" r="20" fill="#FF9800"/>
+                <text x="100" y="110" font-family="Arial" font-size="16" fill="#000000">Encourage Cycling and Walking</text>
+            </g>
+        </svg>
+        
+        <h1>Green Transport Policy Evaluator</h1>
+        <p>A tool for evaluating the impact of transportation policies on mode choice and promoting sustainable transportation.</p>
+        
+        <section id="about">
+            <h2>About the Project</h2>
+            <p>This project aims to provide a comprehensive evaluation of various transportation policies and their impact on urban mobility. By simulating different scenarios, users can understand the potential benefits and drawbacks of each policy.</p>
+        </section>
+        
+        <section id="goals">
+            <h2>Project Goals</h2>
+            <ul>
+                <li>Promote sustainable transportation options</li>
+                <li>Reduce traffic congestion and emissions</li>
+                <li>Enhance public transport usage</li>
+                <li>Provide data-driven insights for policymakers</li>
+            </ul>
+        </section>
+        
+        <section id="how-it-works">
+            <h2>How It Works</h2>
+            <p>Users can input various policy parameters such as bus time reduction, parking fee increase, and bus frequency. The tool then calculates the projected mode share, average travel time, and cost, as well as the reduction in car trips and emissions.</p>
+        </section>
+        
+        <section id="contributions">
+            <h2>Contributions</h2>
+            <p>We welcome contributions from the community. Whether it's improving the code, adding new features, or providing feedback, your input is valuable to us. Please visit our GitHub repository to get started.</p>
+        </section>
+        
+        <form action="/current_patterns" method="get">
+            <button id="getStartedButton" type="submit" disabled>Get Started</button>
+        </form>
+        
+        <footer>
+            <p>All rights reserved © Academic Coding 2025</p>
+        </footer>
+    </div>
+</body>
+</html>

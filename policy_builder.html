@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Policy Builder</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 20px;
+        }
+        #app {
+            max-width: 800px;
+            margin: auto;
+            text-align: center;
+        }
+        h1 {
+            font-family: 'Georgia', serif;
+        }
+        .logo {
+            width: 100px;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label, input {
+            margin: 10px 0;
+        }
+        button {
+            background-color: #00796b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #004d40;
+        }
+    </style>
+    <script>
+        function validateForm() {
+            const busTimeReduction = document.getElementById('busTimeReduction');
+            const parkingFeeIncrease = document.getElementById('parkingFeeIncrease');
+            const busFrequency = document.getElementById('busFrequency');
+
+            if (!busTimeReduction.value) busTimeReduction.value = 0;
+            if (!parkingFeeIncrease.value) parkingFeeIncrease.value = 0;
+            if (!busFrequency.value) busFrequency.value = 0;
+
+            if (busTimeReduction.value == 0 && parkingFeeIncrease.value == 0 && busFrequency.value == 0) {
+                alert('Please enter values for at least one field.');
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+<body>
+    <div id="app">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <h1>Policy Builder</h1>
+        <form action="/result" method="post" onsubmit="return validateForm()">
+            <label for="busTimeReduction">Bus Time Reduction: minutes</label>
+            <input type="number" id="busTimeReduction" name="busTimeReduction" min="0"><br>
+            <label for="parkingFeeIncrease">Parking Fee Increase: $</label>
+            <input type="number" id="parkingFeeIncrease" name="parkingFeeIncrease" min="0"><br>
+            <label for="busFrequency">Bus Frequency: minutes</label>
+            <input type="number" id="busFrequency" name="busFrequency" min="0"><br>
+            <label for="parkAndRide">Park and Ride:</label>
+            <input type="checkbox" id="parkAndRide" name="parkAndRide" value="yes"><br>
+            <button type="submit">Get Result</button>
+        </form>
+    </div>
+</body>
+</html>
